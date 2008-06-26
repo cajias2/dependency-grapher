@@ -1,0 +1,322 @@
+<?xml version="1.0"?>
+<dependencyTree version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../bin/DependencyTree.xsd">
+
+  <!--
+    GL Transaction is not supported by Package tool as there is no WRITE action for this.
+  -->
+  <!--
+    Portfolio is not supported by Package tool as there is no WRITE action for this.
+  -->
+
+  <deploy type="partition" template="partitionTemplate.xml" templatexpath="/NikuDataBus/contentPack/partitionModels" folder="partitions" path="/NikuDataBus/contentPack/partitionModels/partitionModel" xogtype="contentPack"/>
+
+  <deploy type="resource" template="resourceTemplate.xml" templatexpath="/NikuDataBus/Resources" folder="resources" path="/NikuDataBus/Resources/Resource" code="resourceId" xogtype="resource"/>
+
+  <deploy type="group" template="groupTemplate.xml" templatexpath="/NikuDataBus/groups" folder="groups" path="/NikuDataBus/groups/group" code="code" xogtype="group">
+
+    <dependency type="resource" xpath="/NikuDataBus/groups/group/members/resource" attribute="userName" required="true"/>
+
+    <!-- Group also depends on Rights but currently there is no way to xog the rights. So assumed those will remain available -->
+
+  </deploy>
+
+  <deploy type="user" template="userTemplate.xml" templatexpath="/NikuDataBus/Users" folder="users" path="/NikuDataBus/Users/User" code="userName" xogtype="user">
+
+    <dependency type="group" xpath="/NikuDataBus/Users/User/Groups/Group" attribute="id"/>
+
+    <!-- User must have one resource Id associated -->
+    <dependency type="resource" xpath="/NikuDataBus/Users/User/Resource" attribute="resourceId" iselement="true"/>
+
+    <!-- User also depends on Rights but currently there is no way to xog the rights. So assumed those will remain available -->
+
+  </deploy>
+
+  <deploy type="project" template="projectTemplate.xml" templatexpath="/NikuDataBus/Projects" folder="projects" path="/NikuDataBus/Projects/Project" code="projectID" xogtype="project"/>
+
+  <deploy type="application" template="applicationTemplate.xml" templatexpath="/NikuDataBus/Applications" folder="investments" path="/NikuDataBus/Applications/Application" code="objectID" xogtype="application"/>
+
+  <deploy type="asset" template="assetTemplate.xml" templatexpath="/NikuDataBus/Assets" folder="investments" path="/NikuDataBus/Assets/Asset" code="objectID" xogtype="asset"/>
+
+  <deploy type="category" template="categoryTemplate.xml" templatexpath="/NikuDataBus/categories" folder="categories" path="/NikuDataBus/categories/category" code="code" xogtype="category"/>
+
+  <deploy type="chargecode" template="chargeCodeTemplate.xml" templatexpath="/NikuDataBus/chargeCodes" folder="chargeCodes" path="/NikuDataBus/chargeCodes/chargeCode" code="chargeCodeID" xogtype="chargecode"/>
+
+  <deploy type="company" template="companyTemplate.xml" templatexpath="/NikuDataBus/Companies" folder="companies" path="/NikuDataBus/Companies/Company" code="companyId" xogtype="company"/>
+
+  <deploy type="idea" template="ideaTemplate.xml" templatexpath="/NikuDataBus/Ideas" folder="investments" path="/NikuDataBus/Ideas/Idea" code="objectID" xogtype="idea"/>
+
+  <deploy type="issue" template="issueTemplate.xml" templatexpath="/NikuDataBus/issues" folder="riskIssues" path="/NikuDataBus/issues/issue" code="code" xogtype="issue"/>
+
+  <deploy type="obs" template="obsTemplate.xml" templatexpath="/NikuDataBus/obsTypes" folder="obs" path="/NikuDataBus/obsTypes/obs" code="code" xogtype="obs"/>
+
+  <deploy type="otherinvestment" template="otherInvestmentTemplate.xml" templatexpath="/NikuDataBus/OtherInvestments" folder="investments" path="/NikuDataBus/OtherInvestments/OtherInvestment" code="objectID" xogtype="otherinvestment"/>
+
+<!--   <deploy type="portfolio" template="portfolioTemplate.xml" templatexpath="/NikuDataBus/portfolios" folder="portfolios" path="/NikuDataBus/portfolios/portfolio" code="id" xogtype="portfolio"/>
+-->
+  <deploy type="product" template="productTemplate.xml" templatexpath="/NikuDataBus/Products" folder="investments" path="/NikuDataBus/Products/Product" code="objectID" xogtype="product"/>
+
+  <deploy type="risk" template="riskTemplate.xml" templatexpath="/NikuDataBus/risks" folder="riskIssues" path="/NikuDataBus/risks/risk" code="code" xogtype="risk"/>
+
+  <deploy type="role" class="com.niku.xog.packaging.implement.RoleDependency" template="roleTemplate.xml" templatexpath="/NikuDataBus/Roles" folder="roles" path="/NikuDataBus/Roles/Role" code="name" xogtype="role">
+    <dependency type="resource" xpath="/NikuDataBus/Roles/Role" attribute="resourceId"/>
+  </deploy>
+
+  <deploy type="skill" class="com.niku.xog.packaging.implement.SkillsDependency" template="skillsTemplate.xml" templatexpath="/NikuDataBus" folder="skills" path="/NikuDataBus/skills" code="skillCode" xogtype="skill"/>
+
+  <deploy type="typecode" template="typeCodeTemplate.xml" templatexpath="/NikuDataBus/TypeCodes" folder="typeCodes" path="/NikuDataBus/TypeCodes/TypeCode" code="typeCodeID" xogtype="typecode"/>
+
+  <deploy type="timeperiod" template="timePeriodTemplate.xml" templatexpath="/NikuDataBus/TimePeriods" folder="timeperiods" path="/NikuDataBus/TimePeriods/TimePeriod" code="typeCodeID" xogtype="timeperiod">
+    <dependency type="resource" xpath="/NikuDataBus/TimePeriods/TimePeriod/TimeSheets/TimeSheet" attribute="approvedBy" iselement="false" required="false"/>
+    <dependency type="resource" xpath="/NikuDataBus/TimePeriods/TimePeriod/TimeSheets/TimeSheet" attribute="resourceID" iselement="false" required="true"/>
+    <dependency type="resource" xpath="/NikuDataBus/TimePeriods/TimePeriod/TimeSheets/TimeSheet" attribute="submittedBy" iselement="false" required="false"/>
+    <dependency type="resource" xpath="/NikuDataBus/TimePeriods/TimePeriod/TimeSheets/TimeSheet/TimeSheetEntries/TimeSheetEntry" attribute="submittedBy" iselement="false" required="false"/>
+  </deploy>
+
+  <deploy type="entity" template="entityTemplate.xml" templatexpath="/NikuDataBus/Entities" folder="entities" path="/NikuDataBus/Entities/Entity" code="entity" xogtype="entity"/>
+
+  <deploy type="department" template="departmentTemplate.xml" templatexpath="/NikuDataBus/Departments" folder="departments" path="/NikuDataBus/Departments/Department" code="department_code" xogtype="department">
+
+    <!-- Department depends on location -->
+    <dependency type="location" xpath="/NikuDataBus/Departments/Department/LocationAssociations/LocationAssociation" attribute="locationcode" iselement="false"/>
+
+    <!-- Department requires that used entity exists -->
+    <dependency type="entity" xpath="/NikuDataBus/Departments/Department" attribute="entity" iselement="false"/>
+
+  </deploy>
+
+  <deploy type="location" template="locationTemplate.xml" templatexpath="/NikuDataBus/Locations" folder="locations" path="/NikuDataBus/Locations/Location" code="locationCode" xogtype="location">
+
+    <!-- location depends on department -->
+    <dependency type="department" xpath="/NikuDataBus/Locations/Location/DepartmentAssociations/DepartmentAssociation" attribute="departmentcode"/>
+
+  </deploy>
+
+  <deploy type="caplanScenario" template="capplanScenarioTemplate.xml" templatexpath="/NikuDataBus/Scenarios" folder="capplanscenarios" path="/NikuDataBus/Scenarios/Scenario" code="name" xogtype="capplanScenario">
+
+    <!-- capplanScenario depends on investments -->
+    <dependency type="application" xpath="/NikuDataBus/Scenarios/Scenario/Members/Member[@investmentType='APPLICATION']/Investment" attribute="investmentID"/>
+
+    <dependency type="asset" xpath="/NikuDataBus/Scenarios/Scenario/Members/Member[@investmentType='ASSET']/Investment" attribute="investmentID"/>
+
+    <dependency type="product" xpath="/NikuDataBus/Scenarios/Scenario/Members/Member[@investmentType='PRODUCT']/Investment" attribute="investmentID"/>
+
+    <dependency type="idea" xpath="/NikuDataBus/Scenarios/Scenario/Members/Member[@investmentType='IDEA']/Investment" attribute="investmentID"/>
+
+    <dependency type="otherinvestment" xpath="/NikuDataBus/Scenarios/Scenario/Members/Member[@investmentType='OTHER']/Investment" attribute="investmentID"/>
+
+  </deploy>
+
+  <deploy type="requisition" template="requisitionTemplate.xml" templatexpath="/NikuDataBus/requisitions" folder="requisitions" path="/NikuDataBus/requisitions/requisition" code="requirementId" xogtype="requisition"/>
+
+  <deploy type="glperiod" template="glperiodTemplate.xml" templatexpath="/NikuDataBus/GLPeriods" folder="glperiod" path="/NikuDataBus/GLPeriods/GLPeriod" code="periodName" xogtype="glperiod">
+    <dependency type="entity" xpath="/NikuDataBus/GLPeriods/GLPeriod" attribute="entityId" required="true" iselement="false" />
+  </deploy>
+  
+
+  <deploy type="change" template="changeTemplate.xml" templatexpath="/NikuDataBus/changeRequests" folder="changes" path="/NikuDataBus/changeRequests/changeRequest" code="code" xogtype="change"/>
+
+  <deploy type="incident" template="incidentTemplate.xml" templatexpath="/NikuDataBus/incidents" folder="incidents" path="/NikuDataBus/incidents/incident" code="incidentCode" xogtype="incident">
+    <dependency type="resource" xpath="/NikuDataBus/incidents/incident" attribute="reportedBy" required="true"/>
+    <dependency type="lookup" xpath="/NikuDataBus/incidents/incident" attribute="statusCode" iselement="false"/>
+    <dependency type="lookup" xpath="/NikuDataBus/incidents/incident" attribute="impactCode" iselement="false"/>
+    <dependency type="lookup" xpath="/NikuDataBus/incidents/incident" attribute="urgencyCode" iselement="false"/>
+  </deploy>
+
+  <deploy type="financial_planning" template="financialPlanningTemplate.xml" templatexpath="/NikuDataBus/Plans" folder="financial_plannings" path="/NikuDataBus/Plans/Plan" code="detailType" xogtype="financial_planning"/>
+
+  <deploy type="glaccount" template="glaccountTemplate.xml" templatexpath="/NikuDataBus/GlAccounts" folder="glaccounts" path="/NikuDataBus/GlAccounts/GlAccount" code="mainAcctId" xogtype="glaccount"/>
+
+  <deploy type="matrix" template="matrixTemplate.xml" templatexpath="/NikuDataBus/matrices" folder="matrices" path="/NikuDataBus/matrices/matrix" code="name" xogtype="matrix"/>
+
+  <deploy type="costpluscode" template="costpluscodeTemplate.xml" templatexpath="/NikuDataBus/costPlusCodes" folder="costpluscodes" path="/NikuDataBus/costPlusCodes/costPlusCode" code="code" xogtype="costPlusCode"/>
+
+  <deploy type="admincode" template="admincodeTemplate.xml" templatexpath="/NikuDataBus/adminCodes" folder="admincodes" path="/NikuDataBus/adminCodes/adminCode" code="code" xogtype="adminCode"/>
+
+  <deploy type="taxcode" template="taxcodeTemplate.xml" templatexpath="/NikuDataBus/taxCodes" folder="taxcodes" path="/NikuDataBus/taxCodes/taxCode" code="code" xogtype="taxCode"/>
+
+  <deploy type="form" template="formTemplate.xml" templatexpath="/NikuDataBus/Forms" folder="forms" path="/NikuDataBus/Forms/Parent" code="parentId" xogtype="form"/>
+
+  <deploy type="document" template="documentTemplate.xml" templatexpath="/NikuDataBus/Documents" folder="documents" path="/NikuDataBus/Documents/Parent" code="parentObjectId" xogtype="document"/>
+
+  <deploy type="jobDefinition" template="jobTemplate.xml" templatexpath="/NikuDataBus/contentPack/jobDefinitions" folder="jobs" path="/NikuDataBus/contentPack/jobDefinitions/jobDefinition" code="jobDefinitionCode" xogtype="contentPack">
+
+    <dependency type="lookup" xpath="/NikuDataBus/contentPack/jobDefinitions/jobDefinition/parameter" attribute="lookupCode" iselement="true"/>
+
+  </deploy>
+
+  <!-- for sub-sub-object -->
+<!--  <deploy type="subsubobject" class="com.niku.xog.packaging.implement.ObjectDependency" template="objectTemplate.xml" templatexpath="/NikuDataBus/contentPack/objects" folder="objects" path="/NikuDataBus/contentPack/objects/object/object/object" xogtype="contentPack">
+
+    <dependency type="lookup" xpath="/NikuDataBus/contentPack/objects/object/customAttribute" attribute="lookupType"/>
+
+    <dependency type="page" xpath="/NikuDataBus/contentPack/objects/object/links/link" attribute="action" iselement="true"/>
+
+    <dependency type="tab" xpath="/NikuDataBus/contentPack/objects/object/links/link" attribute="action" iselement="true"/>
+
+  </deploy>
+-->
+  <!-- for sub-object -->
+<!--  <deploy type="subobject" class="com.niku.xog.packaging.implement.ObjectDependency" template="objectTemplate.xml" templatexpath="/NikuDataBus/contentPack/objects" folder="objects" path="/NikuDataBus/contentPack/objects/object/object" xogtype="contentPack">
+
+    <dependency type="object" xpath="/NikuDataBus/contentPack/objects/object" attribute="parentObjectCode" required="true"/>
+
+    <dependency type="lookup" xpath="/NikuDataBus/contentPack/objects/object/customAttribute" attribute="lookupType" iselement="true"/>
+
+    <dependency type="page" xpath="/NikuDataBus/contentPack/objects/object/links/link" attribute="action"/>
+
+    <dependency type="tab" xpath="/NikuDataBus/contentPack/objects/object/links/link" attribute="action"/>
+
+  </deploy>
+-->
+  <deploy type="object" class="com.niku.xog.packaging.implement.ObjectDependency" template="objectTemplate.xml" templatexpath="/NikuDataBus/contentPack/objects" folder="objects" path="/NikuDataBus/contentPack/objects/object" xogtype="contentPack">
+
+    <dependency type="lookup" xpath="/NikuDataBus/contentPack/objects/object/customAttribute" attribute="lookupType" required="true"/>
+
+    <dependency type="page" xpath="/NikuDataBus/contentPack/objects/object/links/link" attribute="action" iselement="true"/>
+
+    <dependency type="tab" xpath="/NikuDataBus/contentPack/objects/object/links/link" attribute="action" iselement="true"/>
+
+  </deploy>
+
+  <deploy type="objectMapping" template="objectMappingTemplate.xml" templatexpath="/NikuDataBus/contentPack/objectMappings" folder="objectMappings" path="/NikuDataBus/contentPack/objectMappings/objectMapping" code="mappingCode" xogtype="contentPack">
+
+    <!-- Source object code dependency -->
+    <dependency type="object" xpath="/NikuDataBus/contentPack/objectMappings/objectMapping" attribute="srcObjectCode"/>
+
+    <!-- Destination object code dependency -->
+    <dependency type="object" xpath="/NikuDataBus/contentPack/objectMappings/objectMapping" attribute="destObjectCode"/>
+
+  </deploy>
+
+  <deploy type="lookup" template="lookupTemplate.xml" templatexpath="/NikuDataBus/contentPack/lookups" folder="lookups" path="/NikuDataBus/contentPack/lookups/dynamicLookup" xogtype="contentPack">
+
+    <dependency type="object" xpath="/NikuDataBus/contentPack/lookups/dynamicLookup" attribute="objectCode"/>
+
+  </deploy>
+
+  <deploy type="lookup" template="lookupTemplate.xml" templatexpath="/NikuDataBus/contentPack/lookups" folder="lookups" path="/NikuDataBus/contentPack/lookups/staticLookup" xogtype="contentPack"/>
+
+  <deploy type="lookup" template="lookupTemplate.xml" templatexpath="/NikuDataBus/contentPack/lookups" folder="lookups" path="/NikuDataBus/contentPack/lookups/dependentLookup" xogtype="contentPack"/>
+
+  <deploy type="query" class="com.niku.xog.packaging.implement.QueryDependency" template="queryTemplate.xml" templatexpath="/NikuDataBus/contentPack/queries" folder="queries" path="/NikuDataBus/contentPack/queries/query" xogtype="contentPack">
+
+    <dependency type="lookup"/>
+
+  </deploy>
+
+  <deploy type="portlet" template="portletTemplate.xml" templatexpath="/NikuDataBus/contentPack/portlets" folder="portlets" path="/NikuDataBus/contentPack/portlets/gridPortlet" xogtype="contentPack">
+
+    <dependency type="object" xpath="/NikuDataBus/contentPack/portlets/gridPortlet[@dataProviderType='object']" attribute="dataProviderId" required="true"/>
+
+    <dependency type="query" xpath="/NikuDataBus/contentPack/portlets/gridPortlet[@dataProviderType='nsql']" attribute="dataProviderId" required="true"/>
+
+  </deploy>
+
+  <deploy type="portlet" template="portletTemplate.xml" templatexpath="/NikuDataBus/contentPack/portlets" folder="portlets" path="/NikuDataBus/contentPack/portlets/graphPortlet" xogtype="contentPack">
+
+    <dependency type="object" xpath="/NikuDataBus/contentPack/portlets/graphPortlet[@dataProviderType='object']" attribute="dataProviderId" required="true"/>
+
+    <dependency type="query" xpath="/NikuDataBus/contentPack/portlets/graphPortlet[@dataProviderType='nsql']" attribute="dataProviderId" required="true"/>
+
+  </deploy>
+
+  <deploy type="tabbedPage" template="pageTemplate.xml" templatexpath="/NikuDataBus/contentPack/pages" folder="pages" path="/NikuDataBus/contentPack/pages/tabbedPage" xogtype="contentPack">
+
+    <dependency type="portlet" xpath="/NikuDataBus/contentPack/pages/tabbedPage[@active = 'true']/tab/portlet" attribute="code" iselement="true"/>
+
+  </deploy>
+
+  <deploy type="tab" class="com.niku.xog.packaging.implement.TabDependency" template="pageTemplate.xml" templatexpath="/NikuDataBus/contentPack/pages" folder="pages" path="/NikuDataBus/contentPack/pages/tabbedPage/tab" xogtype="contentPack">
+
+    <dependency type="tabbedPage"/>
+
+  </deploy>
+
+  <deploy type="page" template="pageTemplate.xml" folder="pages" templatexpath="/NikuDataBus/contentPack/pages" path="/NikuDataBus/contentPack/pages/page" xogtype="contentPack">
+
+    <dependency type="portlet" xpath="/NikuDataBus/contentPack/pages/page[@active = 'true']/portlet" attribute="code" iselement="true"/>
+
+  </deploy>
+
+  <deploy type="menu" template="menuTemplate.xml" templatexpath="/NikuDataBus/contentPack/menus" folder="menus" path="/NikuDataBus/contentPack/menus/menu" xogtype="contentPack">
+
+    <dependency type="page" xpath="/NikuDataBus/contentPack/menus/menu/*[name() = 'section']/link[@pageSource != 'system']" attribute=
+    "pageCode"/>
+
+    <dependency type="tab" xpath="/NikuDataBus/contentPack/menus/menu/*[name() = 'section']/link[@pageSource != 'system']" attribute="pageCode"/>
+
+  </deploy>
+
+  <deploy type="propertyView" template="viewTemplate.xml" templatexpath="/NikuDataBus/contentPack/views" folder="views" path="/NikuDataBus/contentPack/views/property" suffix="" code="code" filenameattribute="code" xogtype="contentPack">
+
+    <dependency type="object" xpath="/NikuDataBus/contentPack/views/property" attribute="objectCode" required="true"/>
+
+    <dependency type="lookup" xpath="/NikuDataBus/contentPack/views/property/column/viewFieldDescriptor" attribute="lookupType" iselement="true"/>
+
+  </deploy>
+  
+  <deploy type="filterView" template="viewTemplate.xml" templatexpath="/NikuDataBus/contentPack/views" folder="views" path="/NikuDataBus/contentPack/views/filter" suffix="_filter" code="code" filenameattribute="objectCode" xogtype="contentPack">
+
+    <dependency type="object" xpath="/NikuDataBus/contentPack/views/filter" attribute="objectCode" required="true"/>
+
+  </deploy>
+
+  <!--  <deploy type="propertySet" class="com.niku.xog.packaging.implement.PropertySetDependency" template="viewTemplate.xml" templatexpath="/NikuDataBus/contentPack/views" folder="views" path="/NikuDataBus/contentPack/views/propertySet" code="partitionCode" filenameattribute="partitionCode" xogtype="contentPack">
+
+    <dependency type="object" xpath="/NikuDataBus/contentPack/views/propertySet" attribute="objectCode" required="true"/>
+
+  </deploy>
+  -->
+  <deploy type="listView" template="viewTemplate.xml" templatexpath="/NikuDataBus/contentPack/views" folder="views" path="/NikuDataBus/contentPack/views/list" xogtype="contentPack">
+
+    <dependency type="object" xpath="/NikuDataBus/contentPack/views/list[@dataProviderType='object']" attribute="dataProviderId"/>
+
+    <dependency type="query" xpath="/NikuDataBus/contentPack/views/list[@dataProviderType='nsql']" attribute="dataProviderId"/>
+
+  </deploy>
+
+  <!-- For custom object either corresponding objects should be xogged-out along with custom object instances OR they should be available in target system.  Package tool will report warning if it did not find these objects xogged-out -->
+
+  <deploy type="customObjectInstance" class="com.niku.xog.packaging.implement.CustomObjectInstanceDependency" template="customObjectInstanceTemplate.xml" templatexpath="/NikuDataBus" folder="customobjectinstances" path="/NikuDataBus/customObjectInstances/instance" code="instanceCode" xogtype="customObjectInstance">
+
+    <dependency type="object" xpath="/NikuDataBus/customObjectInstances/instance" attribute="objectCode" required="true"/>
+
+    <dependency type="object" xpath="/NikuDataBus/customObjectInstances/instance/instance" attribute="objectCode" required="true"/>
+
+    <dependency type="object" xpath="/NikuDataBus/customObjectInstances/instance/instance/instance" attribute="objectCode" required="true"/>
+
+  </deploy>
+
+  <deploy type="process" class="com.niku.xog.packaging.implement.ProcessDependency" template="processTemplate.xml" templatexpath="/NikuDataBus/Processes" folder="processes" path="/NikuDataBus/Processes/Process" code="code" xogtype="bpm_process"/>
+
+  <deploy type="process" class="com.niku.xog.packaging.implement.ProcessDependency" template="processContentPackTemplate.xml" templatexpath="/NikuDataBus/contentPack/Processes" folder="processes" path="/NikuDataBus/contentPack/Processes/Process" code="code" xogtype="contentPack"/>
+
+  <deploy type="service" template="serviceTemplate.xml" templatexpath="/NikuDataBus/Services" folder="investments" path="/NikuDataBus/Services/Service" code="objectID" xogtype="service"/>
+
+<!--requirement-->
+  <deploy type="requirement" template="requirementTemplate.xml" templatexpath="/NikuDataBus/requirements" folder="requirements" path="/NikuDataBus/requirements/requirement" xogtype="requirement">
+    <dependency type="project" xpath="/NikuDataBus/requirements/requirement" attribute="investment_name"/>
+    <dependency type="application" xpath="/NikuDataBus/requirements/requirement" attribute="investment_name"/>
+    <dependency type="asset" xpath="/NikuDataBus/requirements/requirement" attribute="investment_name"/>
+    <dependency type="product" xpath="/NikuDataBus/requirements/requirement" attribute="investment_name"/>
+    <dependency type="otherinvestment" xpath="/NikuDataBus/requirements/requirement" attribute="investment_name"/>
+    <dependency type="release" xpath="/NikuDataBus/requirements/requirement" attribute="release_name"/>
+    <dependency type="project" xpath="/NikuDataBus/requirements/requirement" attribute="project_name"/>
+    <dependency type="project" xpath="/NikuDataBus/requirements/requirement" attribute="task_name"/>
+  </deploy>
+  
+  <!--release-->
+  <deploy type="release" template="releaseTemplate.xml" templatexpath="/NikuDataBus/releases" folder="releases" path="/NikuDataBus/releases/release" xogtype="release">
+    <dependency type="project" xpath="/NikuDataBus/releases/release" attribute="investment_name" required="true"/>
+    <dependency type="application" xpath="/NikuDataBus/releases/release" attribute="investment_name" required="true"/>
+    <dependency type="asset" xpath="/NikuDataBus/releases/release" attribute="investment_name" required="true"/>
+    <dependency type="product" xpath="/NikuDataBus/releases/release" attribute="investment_name" required="true"/>
+    <dependency type="otherinvestment" xpath="/NikuDataBus/releases/release" attribute="investment_name" required="true"/>
+    <dependency type="project" xpath="/NikuDataBus/releases/release" attribute="assoc_prj_prg_name"/>
+  </deploy>
+	
+  <!--releaseplan-->
+  <deploy type="releaseplan" template="releaseplanTemplate.xml" templatexpath="/NikuDataBus/releaseplans" folder="releaseplans" path="/NikuDataBus/releaseplans/releaseplan" xogtype="releaseplan"/>
+ 
+
+</dependencyTree>
