@@ -63,7 +63,7 @@ import graph.DependencyDirectedSparceMultiGraph;
  */
 public class DependencyGrapher<V, E> extends JApplet {
 
-	File _dependencyTree = new File("E:\\niku\\main_mssql\\build\\xog\\bin\\DependencyTree.xml");
+	File _dependencyTree = new File("DependencyTree.xml");
 	final static String NODE_DEPLOY = "deploy";
 	final static String NODE_DEPENDANCY = "dependancy";
 	final static String ATTR_DEP_ATTRIBUTE = "attribute";
@@ -95,8 +95,9 @@ public class DependencyGrapher<V, E> extends JApplet {
 
 	private static enum EdgeType { IN_OUT, IN, OUT };
 	private EdgeType _filterEdgeDirection = EdgeType.IN_OUT;
-	private String _filterChoice = "ALL";
+	private String _filterChoice = "";
 	private int _kNeighbourhoodDepth = 1;
+	private Dimension preferredSize1 = new Dimension(700,700);	
 
 	JDialog helpDialog;
 
@@ -113,7 +114,6 @@ public class DependencyGrapher<V, E> extends JApplet {
 		final DependencyDirectedSparceMultiGraph<String, Number> graph = createGraph(); //TestGraphs.getOneComponentGraph();
 
 		// the preferred sizes for the two views
-		final Dimension preferredSize1 = new Dimension(700,700);
 
 		// create one layout for the graph
 		final FRLayout2<String,Number> layout = new FRLayout2<String,Number>(graph);
@@ -191,6 +191,8 @@ public class DependencyGrapher<V, E> extends JApplet {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Dependency Direction: "+EdgeType.IN_OUT);
 				_filterEdgeDirection = EdgeType.IN_OUT;
+				filterLayout = getNewLayout(graph, layout);
+				vv.getModel().setGraphLayout(filterLayout);
 			}
 
 		});
@@ -200,6 +202,8 @@ public class DependencyGrapher<V, E> extends JApplet {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Dependency Direction: "+EdgeType.IN);
 				_filterEdgeDirection = EdgeType.IN;
+				filterLayout = getNewLayout(graph, layout);
+				vv.getModel().setGraphLayout(filterLayout);				
 			}
 
 		});
@@ -209,6 +213,8 @@ public class DependencyGrapher<V, E> extends JApplet {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Dependency Direction: "+EdgeType.OUT);
 				_filterEdgeDirection = EdgeType.OUT;
+				filterLayout = getNewLayout(graph, layout);
+				vv.getModel().setGraphLayout(filterLayout);				
 			}
 
 		});		
@@ -225,20 +231,9 @@ public class DependencyGrapher<V, E> extends JApplet {
 		filterBox.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent e) {
-				HashSet<String> rootNodes = new HashSet();
-				String filterChoice = filterBox.getSelectedItem().toString();
-				System.out.println(filterChoice);
-				rootNodes.add(filterChoice);
-				switch(_filterEdgeDirection)
-				{
-				case IN_OUT: filterLayout = new FRLayout2<String, Number>(KNeighborhoodExtractor.extractNeighborhood(graph,rootNodes, _kNeighbourhoodDepth));
-				break;
-				case IN: filterLayout = new FRLayout2<String, Number>(KNeighborhoodExtractor.extractInDirectedNeighborhood(graph,rootNodes, _kNeighbourhoodDepth));
-				break;
-				case OUT: filterLayout = new FRLayout2<String, Number>(KNeighborhoodExtractor.extractOutDirectedNeighborhood(graph,rootNodes,_kNeighbourhoodDepth));
-				break;
-				}
-				filterLayout.setSize(preferredSize1);				
+				_filterChoice = filterBox.getSelectedItem().toString();
+				System.out.println(_filterChoice);
+				filterLayout = getNewLayout(graph, layout);
 				vv.getModel().setGraphLayout(filterLayout);
 			}
 		}
@@ -253,11 +248,6 @@ public class DependencyGrapher<V, E> extends JApplet {
 		});
 
 		JPanel controls = new JPanel();
-//		JPanel zoomControls = new JPanel();
-//		zoomControls.setBorder(BorderFactory.createTitledBorder("Zoom"));
-//		zoomControls.add(plus);
-//		zoomControls.add(minus);
-//		controls.add(zoomControls);
 
 		JPanel modeControls = new JPanel();
 		modeControls.setBorder(BorderFactory.createTitledBorder("Mouse Mode"));
@@ -291,6 +281,28 @@ public class DependencyGrapher<V, E> extends JApplet {
 		content.add(controls, BorderLayout.SOUTH);
 
 
+	}
+
+	protected FRLayout2<String, Number> getNewLayout(DependencyDirectedSparceMultiGraph<String, Number> graph, FRLayout2<String, Number> oldLayout ) {
+		FRLayout2<String,Number> newLayout = new FRLayout2<String, Number>(graph);
+		HashSet<String> rootNodes = new HashSet();
+		if(_filterChoice == null)
+		{
+			return oldLayout;
+		}
+		
+		rootNodes.add(_filterChoice);
+		switch(_filterEdgeDirection)
+		{
+		case IN_OUT: newLayout = new FRLayout2<String, Number>(KNeighborhoodExtractor.extractNeighborhood(graph,rootNodes, _kNeighbourhoodDepth));
+		break;
+		case IN: newLayout = new FRLayout2<String, Number>(KNeighborhoodExtractor.extractInDirectedNeighborhood(graph,rootNodes, _kNeighbourhoodDepth));
+		break;
+		case OUT: newLayout = new FRLayout2<String, Number>(KNeighborhoodExtractor.extractOutDirectedNeighborhood(graph,rootNodes,_kNeighbourhoodDepth));
+		break;
+		}
+		newLayout.setSize(preferredSize1);			
+		return newLayout;
 	}
 
 	private DependencyDirectedSparceMultiGraph<String, Number> createGraph() {
